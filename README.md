@@ -7,3 +7,6 @@ pip install -e .
 
 ## Запуск тестов
 pytest
+
+## Автор
+v0eker
