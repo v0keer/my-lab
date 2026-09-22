@@ -9,7 +9,7 @@ pip install -e .
 pytest
 
 ## Автор
-v0eker
+v0keer
 
 ## Функционал
 - Сложение
