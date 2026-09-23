@@ -1,55 +1,99 @@
-import math
+import os
+import sys
+# Добавляем путь, чтобы скрипт видел соседний модуль core
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# --- Базовые операции ---
+import core
 
-def add(a: float, b: float) -> float:
-    """Сложение двух чисел."""
-    return a + b
+def clear_screen():
+    """Очищает экран терминала для удобства работы."""
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-def subtract(a: float, b: float) -> float:
-    """Вычитание второго числа из первого."""
-    return a - b
+def get_float_input(prompt: str) -> float:
+    """Безопасно запрашивает число у пользователя."""
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("❌ Ошибка: Введите корректное число.")
 
-def multiply(a: float, b: float) -> float:
-    """Умножение двух чисел."""
-    return a * b
+def main():
+    while True:
+        clear_screen()
+        print("=" * 40)
+        print("        🧮 ИНТЕРАКТИВНЫЙ КАЛЬКУЛЯТОР        ")
+        print("=" * 40)
+        print(" 1. Сложение (+)        6. Корень (√)")
+        print(" 2. Вычитание (-)       7. Факториал (!)")
+        print(" 3. Умножение (*)       8. Синус (sin)")
+        print(" 4. Деление (/)         9. Косинус (cos)")
+        print(" 5. Степень (^)        10. Логарифм (ln)")
+        print("-" * 40)
+        print(" 0. Выход из программы")
+        print("=" * 40)
+        
+        choice = input("Выберите операцию (0-10): ").strip()
+        
+        if choice == '0':
+            print("\n👋 До свидания!")
+            break
+            
+        if choice not in [str(i) for i in range(1, 11)]:
+            input("\n❌ Неверный пункт меню. Нажмите Enter, чтобы повторить...")
+            continue
+            
+        print("\n" + "-" * 40)
+        
+        try:
+            # Операции с двумя числами
+            if choice in ['1', '2', '3', '4', '5']:
+                a = get_float_input("Введите первое число (a): ")
+                b = get_float_input("Введите второе число (b): ")
+                
+                if choice == '1':
+                    res = core.add(a, b)
+                    print(f"\n✅ Результат: {a} + {b} = {res}")
+                elif choice == '2':
+                    res = core.subtract(a, b)
+                    print(f"\n✅ Результат: {a} - {b} = {res}")
+                elif choice == '3':
+                    res = core.multiply(a, b)
+                    print(f"\n✅ Результат: {a} * {b} = {res}")
+                elif choice == '4':
+                    res = core.divide(a, b)
+                    print(f"\n✅ Результат: {a} / {b} = {res}")
+                elif choice == '5':
+                    res = core.power(a, b)
+                    print(f"\n✅ Результат: {a} ^ {b} = {res}")
+            
+            # Операции с одним числом
+            else:
+                a = get_float_input("Введите число: ")
+                
+                if choice == '6':
+                    res = core.sqrt(a)
+                    print(f"\n✅ Результат: √{a} = {res}")
+                elif choice == '7':
+                    if not a.is_integer():
+                        raise ValueError("Факториал можно вычислить только для целого числа")
+                    res = core.factorial(int(a))
+                    print(f"\n✅ Результат: {int(a)}! = {res}")
+                elif choice == '8':
+                    res = core.sin(a)
+                    print(f"\n✅ Результат: sin({a}) = {res}")
+                elif choice == '9':
+                    res = core.cos(a)
+                    print(f"\n✅ Результат: cos({a}) = {res}")
+                elif choice == '10':
+                    res = core.ln(a)
+                    print(f"\n✅ Результат: ln({a}) = {res}")
+                    
+        except ValueError as e:
+            print(f"\n❌ Ошибка вычисления: {e}")
+        except Exception as e:
+            print(f"\n❌ Что-то пошло не так: {e}")
+            
+        input("\nНажмите Enter, чтобы вернуться в меню...")
 
-def divide(a: float, b: float) -> float:
-    """Деление первого числа на второе."""
-    if b == 0:
-        raise ValueError("Деление на ноль невозможно")
-    return a / b
-
-# --- Продвинутые операции ---
-
-def power(a: float, b: float) -> float:
-    """Возведение числа 'a' в степень 'b'."""
-    return a ** b
-
-def sqrt(a: float) -> float:
-    """Квадратный корень числа. Число должно быть неотрицательным."""
-    if a < 0:
-        raise ValueError("Нельзя извлечь корень из отрицательного числа")
-    return math.sqrt(a)
-
-def factorial(n: int) -> int:
-    """Факториал целого неотрицательного числа."""
-    if n < 0:
-        raise ValueError("Факториал определен только для неотрицательных чисел")
-    return math.factorial(n)
-
-# --- Тригонометрия и логарифмы ---
-
-def sin(a: float) -> float:
-    """Синус угла (угол передается в радианах)."""
-    return math.sin(a)
-
-def cos(a: float) -> float:
-    """Косинус угла (угол передается в радианах)."""
-    return math.cos(a)
-
-def ln(a: float) -> float:
-    """Натуральный логарифм (по основанию e)."""
-    if a <= 0:
-        raise ValueError("Логарифм определен только для положительных чисел")
-    return math.log(a)
+if __name__ == "__main__":
+    main()
